@@ -89,7 +89,7 @@ def search_by_genre():
     num = helper.get_choice([1, 5, 0])
 
     song_query = '''
-    SELECT name FROM songs
+    SELECT Name, Artist FROM songs
     WHERE Genre =:genre ORDER BY RANDOM()    
     '''
 
