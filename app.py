@@ -74,13 +74,14 @@ def search_by_genre():
     '''
 
     print("Available genres: ")
-    genres = db_ops.select_query(genre_query)
+    genres = db_ops.single_attribute(genre_query)
 
     # show genres in table and create dictionary
     choices = {}
     for i in range(len(genres)):
         print(i, genres[i])
-        choices[i] = genres[i][0]
+        choices[i] = genres[i]
+
     index = helper.get_choice(choices.keys())
 
     # user can ask to see 1, 5, or all songs
@@ -91,9 +92,18 @@ def search_by_genre():
     SELECT name FROM songs
     WHERE Genre =:genre ORDER BY RANDOM()    
     '''
+
     params = {"genre": genres[index]}
 
+    if num:
+        song_query += " LIMIT :num"
+        params["num"] = num
+
+
+    results = db_ops.select_query_params(song_query, params)
+
     # print results
+    helper.pretty_print(results)
     pass
 
 
