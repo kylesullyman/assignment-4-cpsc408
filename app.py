@@ -90,7 +90,10 @@ def search_by_genre():
 
     song_query = '''
     SELECT Name, Artist FROM songs
-    WHERE Genre =:genre ORDER BY RANDOM()    
+    WHERE Genre = :genre
+    AND Name IS NOT NULL
+    AND Artist IS NOT NULL
+    ORDER BY RANDOM()
     '''
 
     params = {"genre": genres[index]}
@@ -99,6 +102,13 @@ def search_by_genre():
         song_query += " LIMIT :num"
         params["num"] = num
 
+    # clean_none = '''
+    # DELETE FROM songs
+    # WHERE Name LIKE '%None' OR Name IS NULL
+    # OR Genre LIKE '%None' OR Genre IS NULL
+    # OR Artist LIKE '%None' OR Artist IS NULL
+    # '''
+    # clean = db_ops.select_query(clean_none)
 
     results = db_ops.select_query_params(song_query, params)
 
